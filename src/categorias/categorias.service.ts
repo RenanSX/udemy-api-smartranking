@@ -8,10 +8,7 @@ import { Categoria } from './interfaces/categoria.interface';
 
 @Injectable()
 export class CategoriasService {
-  constructor(
-    @InjectModel("Categoria") private readonly categoriaModel: Model<Categoria>,
-    private readonly jogadoresService: JogadoresService
-  ) { }
+  constructor(@InjectModel("Categoria") private readonly categoriaModel: Model<Categoria>, private readonly jogadoresService: JogadoresService) {}
 
   async criarCategoria(criarCategoriaDto: CriarCategoriaDto): Promise<Categoria> {
     const { categoria } = criarCategoriaDto;
@@ -57,7 +54,7 @@ export class CategoriasService {
     if (!categoriaEncontrada) {
       throw new NotFoundException(`Categoria ${categoria} não encontrada!`);
     }
-    
+
     const jogadorJaCadastradoCategoria = await this.categoriaModel.find({ categoria }).where("jogadores").in(idJogador).exec();
     if (jogadorJaCadastradoCategoria.length > 0) {
       throw new BadRequestException(`Jogador ${idJogador} já cadastrado na Categoria ${categoria}!`);
@@ -67,5 +64,19 @@ export class CategoriasService {
 
     categoriaEncontrada.jogadores.push(idJogador);
     await this.categoriaModel.findOneAndUpdate({ categoria }, { $set: categoriaEncontrada }).exec();
+  }
+
+  async consultarCategoriaDoJogador(idJogador: any): Promise<Categoria> {
+    //await this.jogadoresService.consultarJogadorPeloId(idJogador)
+
+    const jogadores = await this.jogadoresService.consultarTodosJogadores();
+
+    const jogadorFilter = jogadores.filter(jogador => jogador._id == idJogador);
+
+    if (jogadorFilter.length == 0) {
+      throw new BadRequestException(`O id ${idJogador} não é um jogador!`);
+    }
+
+    return await this.categoriaModel.findOne().where("jogadores").in(idJogador).exec();
   }
 }
