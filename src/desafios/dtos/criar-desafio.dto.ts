@@ -13,6 +13,4 @@ export class CriarDesafioDto {
   @ArrayMinSize(2)
   @ArrayMaxSize(2)
   jogadores: Array<Jogador>
-
-
 }

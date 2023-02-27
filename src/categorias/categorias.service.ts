@@ -77,6 +77,6 @@ export class CategoriasService {
       throw new BadRequestException(`O id ${idJogador} não é um jogador!`);
     }
 
-    return await this.categoriaModel.findOne().where("jogadores").in(idJogador).exec();
+    return this.categoriaModel.findOne().where("jogadores").in(idJogador).exec();
   }
 }
