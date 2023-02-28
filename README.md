@@ -71,3 +71,12 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+### Start RabbitMQ via Docker
+
+docker run -d -p 8080:15672 -p 5672:5672 -p 25676:25676 -e RABBITMQ_DEFAULT_USER=admin -e RABBITMQ_DEFAULT_PASS=password rabbitmq:3-management
+
+-  acesso ao Rabbit
+   -  URL: http://localhost:8080/
+   -  Login: admin
+   -  Senha: password
